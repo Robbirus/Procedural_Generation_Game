@@ -46,22 +46,22 @@ public class TextureNoise : MonoBehaviour
             for(int y = 0; y < textureSizeY; y++)
             {
                 float2 coordsOffseted = new float2(x + noiseOffset.x, y + noiseOffset.y);
-                float2 coords = coordsOffseted / noiseScale;
+                float2 coords = coordsOffseted * noiseScale;
 
                 switch(noiseType)
                 {
                     case NOISE_TYPE.CELLULAR:
-                        noiseValue = noise.cellular(coords).x * resultPow;
+                        noiseValue = noise.cellular(coords).x;
                         texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
                     case NOISE_TYPE.PERLIN:
-                        noiseValue = noise.cnoise(coords) * resultPow;
+                        noiseValue = noise.cnoise(coords);
                         texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
                     case NOISE_TYPE.SIMPLEX:
-                        noiseValue = noise.snoise(coords) * resultPow;
+                        noiseValue = noise.snoise(coords);
                         texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
@@ -74,8 +74,8 @@ public class TextureNoise : MonoBehaviour
 
     private Color GetColor(float noise)
     {
-        return new Color(color.r * noise,
-                         color.g * noise,
-                         color.b * noise);
+        return new Color(color.r * noise * resultPow,
+                         color.g * noise * resultPow,
+                         color.b * noise * resultPow);
     }
 }
