@@ -12,6 +12,8 @@ public class TextureNoise : MonoBehaviour
     [SerializeField] private float noiseScale = 100f;
     [SerializeField] private float resultPow = 1f;
 
+    [SerializeField] private Color color = new Color(1f, 0f, 0f);
+
     private Texture2D texture;
 
     private void Start()
@@ -34,13 +36,10 @@ public class TextureNoise : MonoBehaviour
 
     private void GenerateTextureNoise()
     {
-        Debug.Log("Noise scale : " + noiseScale);
-        Debug.Log(noise.cellular(new float2(10, 20)));
-
         texture = new Texture2D(textureSizeX, textureSizeY);
         targetRenderer.material.mainTexture = texture;
 
-        Color c = new Color(1f, 0f, 0f);
+        float noiseValue = 0f;
 
         for (int x = 0; x < textureSizeX; x++)
         {
@@ -52,21 +51,18 @@ public class TextureNoise : MonoBehaviour
                 switch(noiseType)
                 {
                     case NOISE_TYPE.CELLULAR:
-                        float noiseX = noise.cellular(coords).x;
-                        c = new Color(1f * noiseX, 0f * noiseX, 0f * noiseX);
-                        texture.SetPixel(x, y, c);
+                        noiseValue = noise.cellular(coords).x * resultPow;
+                        texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
                     case NOISE_TYPE.PERLIN:
-                        float noiseValue = noise.cnoise(coords);
-                        c = new Color(1f * noiseValue, 0f * noiseValue, 0f * noiseValue);
-                        texture.SetPixel(x, y, c);
+                        noiseValue = noise.cnoise(coords) * resultPow;
+                        texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
                     case NOISE_TYPE.SIMPLEX:
-                        noiseValue = noise.snoise(coords);
-                        c = new Color(1f * noiseValue, 0f * noiseValue, 0f * noiseValue);
-                        texture.SetPixel(x, y, c);
+                        noiseValue = noise.snoise(coords) * resultPow;
+                        texture.SetPixel(x, y, GetColor(noiseValue));
                         break;
 
                 }
@@ -74,5 +70,12 @@ public class TextureNoise : MonoBehaviour
         }
 
         texture.Apply();
+    }
+
+    private Color GetColor(float noise)
+    {
+        return new Color(color.r * noise,
+                         color.g * noise,
+                         color.b * noise);
     }
 }
