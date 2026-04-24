@@ -7,10 +7,20 @@ public abstract class ObjectBehaviour<INSTANCE, STATE, DATA> : MonoBehaviour
 {
     protected INSTANCE instance;
 
+    public INSTANCE GetInstance()
+    {
+        return instance;
+    }
 
-    protected DATA Data => instance.state.data;
+    public DATA GetData()
+    {
+        return instance.state.data;
+    }
 
-    protected STATE State => instance.state;
+    public STATE GetState()
+    {
+        return instance.state;
+    }
 
     public void SetInstance(INSTANCE instance)
     {

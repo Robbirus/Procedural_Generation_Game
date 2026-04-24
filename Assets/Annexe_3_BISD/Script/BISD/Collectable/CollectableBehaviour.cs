@@ -4,6 +4,6 @@ public class CollectableBehaviour : ObjectBehaviour<CollectableInstance, Collect
 {
     private void Update()
     {
-        this.gameObject.transform.Rotate(Vector3.up, Data.speedRotation * Time.deltaTime);
+        this.gameObject.transform.Rotate(Vector3.up, this.GetData().speedRotation * Time.deltaTime);
     }
 }
